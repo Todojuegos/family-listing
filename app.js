@@ -259,6 +259,13 @@ async function addProduct(e) {
 }
 
 async function togglePurchased(id, currentState) {
+  // Actualizar UI local al instante (optimista)
+  const product = products.find(p => p.id === id);
+  if (product) {
+    product.purchased = !currentState;
+    renderProducts();
+  }
+
   const { error } = await sb
     .from('products')
     .update({ purchased: !currentState })
@@ -266,6 +273,9 @@ async function togglePurchased(id, currentState) {
 
   if (error) {
     console.error('Error toggling product:', error);
+    // Revertir si falló
+    if (product) product.purchased = currentState;
+    renderProducts();
     showToast('Error al actualizar');
   }
 }

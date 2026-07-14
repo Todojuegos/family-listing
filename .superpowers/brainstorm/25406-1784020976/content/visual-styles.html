@@ -1,0 +1,142 @@
+<h2>🎨 Rediseño Visual — 4 Direcciones</h2>
+<p class="subtitle">Elige la personalidad visual de Family Listing. Luego refinamos.</p>
+
+<div class="cards">
+  <div class="card" data-choice="warm" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: linear-gradient(135deg, #fff7ed, #ffedd5); padding: 20px; border-radius: 12px;">
+      <div style="font-family: system-ui; color: #c2410c;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <span style="font-weight: 700; font-size: 18px;">🛒 Family List</span>
+          <span style="font-size: 20px;">🚪</span>
+        </div>
+        <div style="background: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+          <div style="font-size: 12px; color: #9a3412; font-weight: 600; margin-bottom: 8px;">AÑADIR PRODUCTO</div>
+          <div style="background: #fff7ed; border: 2px solid #fed7aa; border-radius: 14px; padding: 10px 14px; margin-bottom: 6px; color: #9a3412;">🥚 Nombre del producto</div>
+          <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+            <div style="flex:1; background: #fff7ed; border: 2px solid #fed7aa; border-radius: 14px; padding: 10px; color: #9a3412;">🔢 Cantidad</div>
+            <div style="flex:1; background: #fff7ed; border: 2px solid #fed7aa; border-radius: 14px; padding: 10px; color: #9a3412;">📂 Cat</div>
+          </div>
+          <div style="background: #f97316; color: white; text-align: center; padding: 10px; border-radius: 14px; font-weight: 600;">➕ Añadir</div>
+        </div>
+        <div style="background: white; border-radius: 16px; padding: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #fed7aa;">
+            <div style="width: 22px; height: 22px; border: 2px solid #fdba74; border-radius: 50%;"></div>
+            <div style="flex:1;"><div style="font-weight: 600; font-size: 14px;">Leche</div><div style="font-size: 11px; color: #9a3412;">🔢 2 · 📂 Lácteos · 👤 Neus</div></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding: 8px 0;">
+            <div style="width: 22px; height: 22px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px;">✓</div>
+            <div style="flex:1; opacity: 0.5; text-decoration: line-through;"><div style="font-weight: 600; font-size: 14px;">Pan</div><div style="font-size: 11px; color: #9a3412;">🔢 1 · 📂 Panadería · 👤 Alex</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>🧡 Cálido & Familiar</h3>
+      <p>Tonos naranja/terracota, bordes muy redondeados, sensación acogedora. Como una nota en la nevera.</p>
+      <p style="font-size: 12px; color: var(--text-muted);">Paleta: naranjas, cremas, marrones suaves</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="fresh" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); padding: 20px; border-radius: 12px;">
+      <div style="font-family: system-ui; color: #065f46;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <span style="font-weight: 700; font-size: 18px;">🛒 Family List</span>
+          <span style="font-size: 20px;">🚪</span>
+        </div>
+        <div style="background: white; border-radius: 20px; padding: 16px; margin-bottom: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.06);">
+          <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+            <div style="flex:2; background: #f0faf4; border: none; border-radius: 12px; padding: 12px 14px; color: #065f46;">🥚 Nombre</div>
+            <div style="flex:1; background: #f0faf4; border: none; border-radius: 12px; padding: 12px; color: #065f46;">🔢</div>
+          </div>
+          <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+            <div style="flex:1; background: #f0faf4; border: none; border-radius: 12px; padding: 12px; color: #065f46;">📂 Cat</div>
+            <div style="flex:1; background: #f0faf4; border: none; border-radius: 12px; padding: 12px; color: #065f46;">👤</div>
+          </div>
+          <div style="background: #10b981; color: white; text-align: center; padding: 12px; border-radius: 12px; font-weight: 600;">➕ Añadir</div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <div style="flex:1; background: white; border-radius: 20px; padding: 14px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.06);">
+            <div style="font-size: 24px;">🥑</div><div style="font-size: 11px; margin-top: 4px;">Pendientes</div><div style="font-weight: 700;">3</div>
+          </div>
+          <div style="flex:1; background: white; border-radius: 20px; padding: 14px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.06);">
+            <div style="font-size: 24px;">✅</div><div style="font-size: 11px; margin-top: 4px;">Comprados</div><div style="font-weight: 700;">2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>🌿 Fresco & Natural</h3>
+      <p>Verdes suaves, mucho espacio blanco, tarjetas con sombras amplias. Look de app de salud/bienestar.</p>
+      <p style="font-size: 12px; color: var(--text-muted);">Paleta: verdes menta, blancos, grises cálidos</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="bold" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: #fef3c7; padding: 20px; border-radius: 12px;">
+      <div style="font-family: system-ui; color: #1e293b;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <span style="font-weight: 900; font-size: 20px; background: #1e293b; color: #fef3c7; padding: 4px 12px;">🛒 FAMILY LIST</span>
+        </div>
+        <div style="background: white; border: 3px solid #1e293b; border-radius: 0; padding: 16px; margin-bottom: 12px; box-shadow: 6px 6px 0 #1e293b;">
+          <div style="border: 3px solid #1e293b; padding: 12px; margin-bottom: 8px; font-weight: 700; font-size: 14px;">Nombre del producto</div>
+          <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+            <div style="flex:1; border: 3px solid #1e293b; padding: 10px; font-weight: 700;">Cantidad</div>
+            <div style="flex:1; border: 3px solid #1e293b; padding: 10px; font-weight: 700;">Categoría</div>
+          </div>
+          <div style="background: #f59e0b; border: 3px solid #1e293b; color: #1e293b; text-align: center; padding: 12px; font-weight: 900; box-shadow: 4px 4px 0 #1e293b;">➕ AÑADIR</div>
+        </div>
+        <div style="border: 3px solid #1e293b; padding: 12px; background: white; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+          <div style="width: 24px; height: 24px; border: 3px solid #1e293b;"></div>
+          <div style="flex:1; font-weight: 700;">🍞 Pan de molde</div>
+          <div style="font-size: 18px;">✏️ 🗑️</div>
+        </div>
+        <div style="border: 3px solid #1e293b; padding: 12px; background: #d1fae5; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; opacity: 0.6;">
+          <div style="width: 24px; height: 24px; background: #1e293b; display: flex; align-items: center; justify-content: center; color: #d1fae5; font-size: 14px;">✓</div>
+          <div style="flex:1; font-weight: 700; text-decoration: line-through;">🥛 Leche</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>💥 Bold & Divertido</h3>
+      <p>Neubrutalismo: bordes duros, sombras sólidas, colores vibrantes. Muy trendy, personalidad fuerte.</p>
+      <p style="font-size: 12px; color: var(--text-muted);">Paleta: amarillos, negro, toques neón</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="soft" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: linear-gradient(135deg, #faf5ff, #ede9fe); padding: 20px; border-radius: 12px;">
+      <div style="font-family: system-ui; color: #5b21b6;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <span style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 28px;">🛒</span>
+            <span style="font-weight: 600; font-size: 17px;">Family List</span>
+          </span>
+          <span style="width: 32px; height: 32px; background: #ede9fe; border-radius: 50%; display: flex; align-items: center; justify-content: center;">🚪</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-radius: 24px; padding: 20px; margin-bottom: 12px;">
+          <div style="background: #f5f3ff; border-radius: 16px; padding: 14px; margin-bottom: 8px; font-size: 15px;">🥚 ¿Qué hace falta?</div>
+          <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+            <div style="flex:1; background: #f5f3ff; border-radius: 16px; padding: 12px; text-align: center;">🔢</div>
+            <div style="flex:1; background: #f5f3ff; border-radius: 16px; padding: 12px; text-align: center;">📂</div>
+            <div style="flex:1; background: #f5f3ff; border-radius: 16px; padding: 12px; text-align: center;">👤</div>
+          </div>
+          <div style="background: #8b5cf6; color: white; text-align: center; padding: 14px; border-radius: 30px; font-weight: 600; box-shadow: 0 4px 15px rgba(139,92,246,0.3);">Añadir a la lista</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.7); border-radius: 20px; padding: 8px; display: flex; gap: 6px; margin-bottom: 6px;">
+          <div style="width: 24px; height: 24px; border: 2px solid #c4b5fd; border-radius: 50%; flex-shrink: 0;"></div>
+          <div style="flex:1;"><div style="font-weight: 600; font-size: 14px;">Huevos</div><div style="font-size: 11px; opacity: 0.7;">📂 Lácteos · 👤 Neus</div></div>
+        </div>
+        <div style="background: rgba(255,255,255,0.7); border-radius: 20px; padding: 8px; display: flex; gap: 6px; opacity: 0.5;">
+          <div style="width: 24px; height: 24px; background: #a78bfa; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px;">✓</div>
+          <div style="flex:1; text-decoration: line-through;"><div style="font-weight: 600; font-size: 14px;">Tomates</div><div style="font-size: 11px;">📂 Fruta · 👤 Alex</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>💜 Suave & Acrílico</h3>
+      <p>Efectos glass/blur, bordes muy redondeados, sombras de color. Look premium tipo iOS moderno.</p>
+      <p style="font-size: 12px; color: var(--text-muted);">Paleta: lavanda, púrpuras, blancos translúcidos</p>
+    </div>
+  </div>
+</div>
