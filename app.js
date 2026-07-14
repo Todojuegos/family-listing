@@ -1,10 +1,10 @@
 // ===== CONFIGURACIÓN =====
 // Reemplaza con tus datos de Supabase (Settings → API en el dashboard)
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';     // https://xxxxxxxxxxxx.supabase.co
-const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';     // eyJhbGciOi...
+const SUPABASE_URL = 'https://ccouvrcotswtmoeesjkk.sb.co';     // https://xxxxxxxxxxxx.sb.co
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjb3V2cmNvdHN3dG1vZWVzamtrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMTMyMjMsImV4cCI6MjA5OTU4OTIyM30.fmhhpQAHA7Qb-lJMpdH9wtfJKqsjz-TNC6au09FZ4EE';     // eyJhbGciOi...
 
 // ===== CLIENTE SUPABASE =====
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ===== CONSTANTES =====
 const CATEGORIES = [
@@ -240,7 +240,7 @@ async function addProduct(e) {
     return;
   }
 
-  const { error } = await supabase.from('products').insert(product);
+  const { error } = await sb.from('products').insert(product);
 
   if (error) {
     console.error('Error adding product:', error);
