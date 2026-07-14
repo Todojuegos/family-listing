@@ -70,7 +70,7 @@ function isAuthenticated() {
 }
 
 async function validatePin(pin) {
-  const { data, error } = await supabase
+  const { data, error } = await sb
     .from('settings')
     .select('value')
     .eq('key', 'family_pin')
@@ -132,7 +132,7 @@ function logout() {
 // ===== SETTINGS =====
 
 async function fetchSettings() {
-  const { data, error } = await supabase
+  const { data, error } = await sb
     .from('settings')
     .select('key, value');
 
@@ -164,7 +164,7 @@ function populateSelectors() {
 // ===== PRODUCTS =====
 
 async function fetchProducts() {
-  const { data, error } = await supabase
+  const { data, error } = await sb
     .from('products')
     .select('*')
     .order('created_at', { ascending: false });
@@ -259,7 +259,7 @@ async function addProduct(e) {
 }
 
 async function togglePurchased(id, currentState) {
-  const { error } = await supabase
+  const { error } = await sb
     .from('products')
     .update({ purchased: !currentState })
     .eq('id', id);
@@ -273,7 +273,7 @@ async function togglePurchased(id, currentState) {
 async function deleteProduct(id) {
   if (!confirm('¿Eliminar este producto?')) return;
 
-  const { error } = await supabase
+  const { error } = await sb
     .from('products')
     .delete()
     .eq('id', id);
@@ -324,7 +324,7 @@ async function saveEdit(e) {
     return;
   }
 
-  const { error } = await supabase
+  const { error } = await sb
     .from('products')
     .update(updates)
     .eq('id', editId.value);
@@ -344,7 +344,7 @@ async function saveEdit(e) {
 async function resetAll() {
   if (!confirm('¿Marcar todos los productos como pendientes?')) return;
 
-  const { error } = await supabase
+  const { error } = await sb
     .from('products')
     .update({ purchased: false })
     .neq('id', '00000000-0000-0000-0000-000000000000');
@@ -361,7 +361,7 @@ async function resetAll() {
 async function clearPurchased() {
   if (!confirm('¿Borrar todos los productos comprados?')) return;
 
-  const { error } = await supabase
+  const { error } = await sb
     .from('products')
     .delete()
     .eq('purchased', true);
@@ -378,7 +378,7 @@ async function clearPurchased() {
 // ===== SUGGESTIONS / HISTORY =====
 
 async function fetchHistory() {
-  const { data, error } = await supabase
+  const { data, error } = await sb
     .from('product_history')
     .select('name')
     .order('last_used', { ascending: false })
@@ -405,7 +405,7 @@ async function fetchHistory() {
 }
 
 async function recordToHistory(name) {
-  const { error } = await supabase
+  const { error } = await sb
     .from('product_history')
     .upsert({ name: name.toLowerCase().trim(), last_used: new Date().toISOString() });
 
@@ -423,7 +423,7 @@ async function recordToHistory(name) {
 // ===== REAL-TIME =====
 
 function subscribeToChanges() {
-  supabase
+  sb
     .channel('products-changes')
     .on('postgres_changes',
       { event: '*', schema: 'public', table: 'products' },
