@@ -227,7 +227,7 @@ function escapeHtml(text) {
 async function addProduct(e) {
   e.preventDefault();
 
-  const product = {
+  const productData = {
     name: addName.value.trim(),
     quantity: addQuantity.value.trim(),
     category: addCategory.value,
@@ -235,12 +235,17 @@ async function addProduct(e) {
     store: addStore.value.trim() || null
   };
 
-  if (!product.name || !product.quantity || !product.category || !product.added_by) {
+  if (!productData.name || !productData.quantity || !productData.category || !productData.added_by) {
     showToast('Rellena todos los campos obligatorios');
     return;
   }
 
-  const { error } = await sb.from('products').insert(product);
+  // Limpiar formulario ya (antes de que responda el server)
+  addForm.reset();
+  addName.focus();
+
+  // Insertar en Supabase
+  const { data, error } = await sb.from('products').insert(productData).select();
 
   if (error) {
     console.error('Error adding product:', error);
@@ -248,14 +253,17 @@ async function addProduct(e) {
     return;
   }
 
-  // Guardar en historial para sugerencias
-  await recordToHistory(product.name);
+  // Añadir a la lista local (optimista tras confirmación del server con el ID real)
+  if (data && data[0]) {
+    products.unshift(data[0]);
+    renderProducts();
+  } else {
+    // Si no devolvió datos, refrescar todo
+    await fetchProducts();
+  }
 
-  // Limpiar formulario
-  addForm.reset();
-  addName.focus();
-
-  showToast('✅ Producto añadido');
+  await recordToHistory(productData.name);
+  showToast('Producto añadido');
 }
 
 async function togglePurchased(id, currentState) {
@@ -283,6 +291,11 @@ async function togglePurchased(id, currentState) {
 async function deleteProduct(id) {
   if (!confirm('¿Eliminar este producto?')) return;
 
+  // Borrar de UI al instante
+  const removed = products.find(p => p.id === id);
+  products = products.filter(p => p.id !== id);
+  renderProducts();
+
   const { error } = await sb
     .from('products')
     .delete()
@@ -290,9 +303,15 @@ async function deleteProduct(id) {
 
   if (error) {
     console.error('Error deleting product:', error);
+    // Revertir
+    if (removed) {
+      products.push(removed);
+      products.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    }
+    renderProducts();
     showToast('Error al eliminar');
   } else {
-    showToast('🗑️ Producto eliminado');
+    showToast('Producto eliminado');
   }
 }
 
@@ -334,25 +353,41 @@ async function saveEdit(e) {
     return;
   }
 
+  const id = editId.value;
+
+  // Actualizar UI al instante
+  const product = products.find(p => p.id === id);
+  const previous = product ? { ...product } : null;
+  if (product) Object.assign(product, updates);
+  closeEdit();
+  renderProducts();
+
   const { error } = await sb
     .from('products')
     .update(updates)
-    .eq('id', editId.value);
+    .eq('id', id);
 
   if (error) {
     console.error('Error updating product:', error);
+    // Revertir
+    if (product && previous) Object.assign(product, previous);
+    renderProducts();
     showToast('Error al guardar cambios');
-    return;
+  } else {
+    showToast('Cambios guardados');
   }
-
-  closeEdit();
-  showToast('✅ Cambios guardados');
 }
 
 // ===== CLEAR =====
 
 async function resetAll() {
   if (!confirm('¿Marcar todos los productos como pendientes?')) return;
+
+  // Actualizar UI al instante
+  const previous = products.map(p => ({ ...p }));
+  products.forEach(p => { p.purchased = false; });
+  renderProducts();
+  clearDropdown.classList.add('hidden');
 
   const { error } = await sb
     .from('products')
@@ -361,15 +396,23 @@ async function resetAll() {
 
   if (error) {
     console.error('Error resetting products:', error);
+    // Revertir
+    products = previous;
+    renderProducts();
     showToast('Error al reiniciar lista');
   } else {
-    showToast('🔄 Lista reiniciada');
+    showToast('Lista reiniciada');
   }
-  clearDropdown.classList.add('hidden');
 }
 
 async function clearPurchased() {
   if (!confirm('¿Borrar todos los productos comprados?')) return;
+
+  // Actualizar UI al instante
+  const removed = products.filter(p => p.purchased);
+  products = products.filter(p => !p.purchased);
+  renderProducts();
+  clearDropdown.classList.add('hidden');
 
   const { error } = await sb
     .from('products')
@@ -378,11 +421,14 @@ async function clearPurchased() {
 
   if (error) {
     console.error('Error clearing purchased:', error);
+    // Revertir
+    products = [...products, ...removed];
+    products.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    renderProducts();
     showToast('Error al limpiar comprados');
   } else {
-    showToast('🗑️ Comprados eliminados');
+    showToast('Comprados eliminados');
   }
-  clearDropdown.classList.add('hidden');
 }
 
 // ===== SUGGESTIONS / HISTORY =====
