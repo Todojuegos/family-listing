@@ -13,9 +13,10 @@ const CATEGORIES = [
   'Salsas y Especias', 'Snacks', 'Otros'
 ];
 
-const STORAGE_KEY = 'family_listing_pin';
+const STORAGE_KEY = 'family_listing_auth';
 
 // ===== ESTADO =====
+let currentFamily = null;   // { id, name, pin, members }
 let products = [];
 let members = [];
 let productHistory = [];
@@ -66,22 +67,26 @@ const toast = $('#toast');
 // ===== AUTH =====
 
 function isAuthenticated() {
-  return localStorage.getItem(STORAGE_KEY) !== null;
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (!stored) return false;
+  try {
+    const auth = JSON.parse(stored);
+    return auth.family_id && auth.pin;
+  } catch { return false; }
 }
 
 async function validatePin(pin) {
   const { data, error } = await sb
-    .from('settings')
-    .select('value')
-    .eq('key', 'family_pin')
+    .from('families')
+    .select('*')
+    .eq('pin', pin)
     .single();
 
-  if (error) {
-    console.error('Error fetching PIN:', error);
-    return false;
+  if (error || !data) {
+    return null; // PIN no encontrado
   }
 
-  return data.value === pin;
+  return data; // { id, name, pin, members }
 }
 
 function showPinScreen() {
@@ -106,10 +111,11 @@ async function handlePinSubmit(e) {
   submitBtn.disabled = true;
   submitBtn.textContent = 'Verificando...';
 
-  const valid = await validatePin(pin);
+  const family = await validatePin(pin);
 
-  if (valid) {
-    localStorage.setItem(STORAGE_KEY, pin);
+  if (family) {
+    currentFamily = family;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ family_id: family.id, pin: family.pin }));
     pinError.classList.add('hidden');
     pinInput.value = '';
     showAppScreen();
@@ -125,28 +131,40 @@ async function handlePinSubmit(e) {
 
 function logout() {
   localStorage.removeItem(STORAGE_KEY);
+  currentFamily = null;
   products = [];
+  members = [];
   showPinScreen();
 }
 
 // ===== SETTINGS =====
 
-async function fetchSettings() {
+function restoreFamily() {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (!stored) return false;
+  try {
+    const auth = JSON.parse(stored);
+    currentFamily = { id: auth.family_id, pin: auth.pin };
+    return true;
+  } catch { return false; }
+}
+
+async function fetchFamily() {
   const { data, error } = await sb
-    .from('settings')
-    .select('key, value');
+    .from('families')
+    .select('*')
+    .eq('id', currentFamily.id)
+    .single();
 
-  if (error) {
-    console.error('Error fetching settings:', error);
-    return;
+  if (error || !data) {
+    console.error('Error fetching family:', error);
+    return false;
   }
 
-  const membersRow = data.find(s => s.key === 'members');
-  if (membersRow) {
-    members = membersRow.value.split(',').map(m => m.trim());
-  }
-
+  currentFamily = data;
+  members = data.members.split(',').map(m => m.trim());
   populateSelectors();
+  return true;
 }
 
 function populateSelectors() {
@@ -167,6 +185,7 @@ async function fetchProducts() {
   const { data, error } = await sb
     .from('products')
     .select('*')
+    .eq('family_id', currentFamily.id)
     .order('created_at', { ascending: false });
 
   if (error) {
@@ -232,7 +251,8 @@ async function addProduct(e) {
     quantity: addQuantity.value.trim(),
     category: addCategory.value,
     added_by: addAddedBy.value,
-    store: addStore.value.trim() || null
+    store: addStore.value.trim() || null,
+    family_id: currentFamily.id
   };
 
   if (!productData.name || !productData.quantity || !productData.category || !productData.added_by) {
@@ -392,6 +412,7 @@ async function resetAll() {
   const { error } = await sb
     .from('products')
     .update({ purchased: false })
+    .eq('family_id', currentFamily.id)
     .neq('id', '00000000-0000-0000-0000-000000000000');
 
   if (error) {
@@ -417,6 +438,7 @@ async function clearPurchased() {
   const { error } = await sb
     .from('products')
     .delete()
+    .eq('family_id', currentFamily.id)
     .eq('purchased', true);
 
   if (error) {
@@ -437,6 +459,7 @@ async function fetchHistory() {
   const { data, error } = await sb
     .from('product_history')
     .select('name')
+    .eq('family_id', currentFamily.id)
     .order('last_used', { ascending: false })
     .limit(20);
 
@@ -463,7 +486,7 @@ async function fetchHistory() {
 async function recordToHistory(name) {
   const { error } = await sb
     .from('product_history')
-    .upsert({ name: name.toLowerCase().trim(), last_used: new Date().toISOString() });
+    .upsert({ name: name.toLowerCase().trim(), family_id: currentFamily.id, last_used: new Date().toISOString() });
 
   if (error) {
     console.error('Error recording history:', error);
@@ -480,9 +503,9 @@ async function recordToHistory(name) {
 
 function subscribeToChanges() {
   sb
-    .channel('products-changes')
+    .channel('products-changes-' + currentFamily.id)
     .on('postgres_changes',
-      { event: '*', schema: 'public', table: 'products' },
+      { event: '*', schema: 'public', table: 'products', filter: `family_id=eq.${currentFamily.id}` },
       () => { fetchProducts(); }
     )
     .subscribe();
@@ -543,7 +566,21 @@ async function initApp() {
   listLoading.classList.remove('hidden');
   listEmpty.classList.add('hidden');
 
-  await Promise.all([fetchSettings(), fetchProducts(), fetchHistory()]);
+  if (!currentFamily || !currentFamily.name) {
+    const ok = await fetchFamily();
+    if (!ok) {
+      logout();
+      return;
+    }
+  } else {
+    members = currentFamily.members.split(',').map(m => m.trim());
+    populateSelectors();
+  }
+
+  // Mostrar nombre de la familia en el header
+  document.querySelector('.app-title').textContent = currentFamily.name;
+
+  await Promise.all([fetchProducts(), fetchHistory()]);
 
   subscribeToChanges();
 
@@ -554,7 +591,7 @@ async function initApp() {
 document.addEventListener('DOMContentLoaded', () => {
   bindEvents();
 
-  if (isAuthenticated()) {
+  if (isAuthenticated() && restoreFamily()) {
     showAppScreen();
   } else {
     showPinScreen();
