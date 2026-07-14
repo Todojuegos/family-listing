@@ -1,6 +1,6 @@
 // ===== CONFIGURACIÓN =====
 // Reemplaza con tus datos de Supabase (Settings → API en el dashboard)
-const SUPABASE_URL = 'https://ccouvrcotswtmoeesjkk.sb.co';     // https://xxxxxxxxxxxx.sb.co
+const SUPABASE_URL = 'https://ccouvrcotswtmoeesjkk.supabase.co';     // https://xxxxxxxxxxxx.supabase.co
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjb3V2cmNvdHN3dG1vZWVzamtrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMTMyMjMsImV4cCI6MjA5OTU4OTIyM30.fmhhpQAHA7Qb-lJMpdH9wtfJKqsjz-TNC6au09FZ4EE';     // eyJhbGciOi...
 
 // ===== CLIENTE SUPABASE =====
