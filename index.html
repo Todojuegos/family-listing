@@ -141,14 +141,15 @@
   </div>
 
   <!-- Supabase SDK from CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <!-- App logic -->
   <script src="app.js"></script>
 
   <!-- Register Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js');
+      navigator.serviceWorker.register('./sw.js', { scope: './' })
+        .catch(() => console.log('SW registration failed — running without offline support'));
     }
   </script>
 </body>
