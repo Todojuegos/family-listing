@@ -196,10 +196,10 @@ function renderProducts() {
         <div class="product-info">
           <div class="product-name">${escapeHtml(p.name)}</div>
           <div class="product-details">
-            <span class="product-detail">🔢 ${escapeHtml(p.quantity)}</span>
-            <span class="product-detail">📂 ${escapeHtml(p.category)}</span>
-            <span class="product-detail">👤 ${escapeHtml(p.added_by)}</span>
-            ${p.store ? `<span class="product-detail">🏪 ${escapeHtml(p.store)}</span>` : ''}
+            <span class="product-detail pd-qty">Cant <span class="pd-value">${escapeHtml(p.quantity)}</span></span>
+            <span class="product-detail pd-cat"><span class="pd-value">${escapeHtml(p.category)}</span></span>
+            <span class="product-detail pd-who">por <span class="pd-value">${escapeHtml(p.added_by)}</span></span>
+            ${p.store ? `<span class="product-detail pd-store"><span class="pd-value">${escapeHtml(p.store)}</span></span>` : ''}
           </div>
         </div>
         <div class="product-actions">

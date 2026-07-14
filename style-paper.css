@@ -247,14 +247,21 @@ select.input {
   font-weight: 400;
   letter-spacing: -0.2px;
 }
-.product-details { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.product-details { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
 .product-detail {
   font-family: var(--font-mono);
   font-size: 0.58rem;
-  color: var(--ink-light);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border: 1px solid var(--line);
+  color: var(--ink-faded);
 }
+.product-detail .pd-value { color: var(--ink); font-weight: 500; }
+.product-detail.pd-qty .pd-value { color: #8b6914; }
+.product-detail.pd-cat .pd-value { color: var(--stamp-red); }
+.product-detail.pd-who .pd-value { color: #2c5f7c; }
+.product-detail.pd-store .pd-value { color: #5c7a3c; }
 
 .product-actions { display: flex; gap: 2px; flex-shrink: 0; }
 .product-actions .btn { padding: 4px 6px; font-size: 0.65rem; border: none; background: none; color: var(--ink-light); }
